@@ -1,5 +1,7 @@
 {
   "trailingComma": "es5",
   "tabWidth": 2,
-  "semi": true
+  "semi": true,
+  "tailwindFunctions": ["tv"],
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
