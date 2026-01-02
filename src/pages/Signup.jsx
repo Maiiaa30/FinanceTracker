@@ -44,7 +44,7 @@ const signupSchema = z.object({
 });
 
 const SignupPage = () => {
-  const methods = useForm({
+  const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       firstName: "",
@@ -62,16 +62,16 @@ const SignupPage = () => {
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
-      <Form {...methods}>
-        <form onSubmit={methods.handleSubmit(handleSubmit)}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           <Card className="w-125">
             <CardHeader>
               <CardTitle>Criar conta</CardTitle>
               <CardDescription>Coloque os seus dados abaixo.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-2">
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
@@ -84,7 +84,7 @@ const SignupPage = () => {
                 )}
               />
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
@@ -97,20 +97,24 @@ const SignupPage = () => {
                 )}
               />
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Escreva seu email" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="Escreva seu email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
@@ -126,7 +130,7 @@ const SignupPage = () => {
                 )}
               />
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="passwordConfirmation"
                 render={({ field }) => (
                   <FormItem>
@@ -143,7 +147,7 @@ const SignupPage = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="terms"
                 render={({ field }) => (
                   <FormItem className="items-top flex space-x-2">
