@@ -1,9 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
-import { toast } from "sonner";
 import z from "zod";
 
 import PasswordInput from "@/components/passwordsInputs";
@@ -25,8 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthContext } from "@/contexts/auth";
-import { api } from "@/lib/axios";
+import { useAuthContext } from "@/contexts/auth";
 
 const loginSchema = z.object({
   email: z.email({ message: "Email invalido" }),
@@ -36,7 +32,7 @@ const loginSchema = z.object({
 });
 
 const LoginPage = () => {
-  const { user, login } = useContext(AuthContext);
+  const { user, login } = useAuthContext();
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
