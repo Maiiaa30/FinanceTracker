@@ -36,19 +36,7 @@ const loginSchema = z.object({
 });
 
 const LoginPage = () => {
-  const { user: userTest } = useContext(AuthContext);
-  const [user, setUser] = useState(null);
-
-  const loginMutation = useMutation({
-    mutationKey: ["login"],
-    mutationFn: async (variables) => {
-      const response = await api.post("/users/login", {
-        email: variables.email,
-        password: variables.password,
-      });
-      return response.data;
-    },
-  });
+  const { user, login } = useContext(AuthContext);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -58,42 +46,7 @@ const LoginPage = () => {
     },
   });
 
-  useEffect(() => {
-    const init = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!accessToken || !refreshToken) return;
-      try {
-        const response = await api.get("/users/me", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        setUser(response.data);
-      } catch (error) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        console.error("Erro ao acessar o localStorage:", error);
-      }
-    };
-    init();
-  }, []);
-
-  const handleSubmit = (data) => {
-    loginMutation.mutate(data, {
-      onSuccess: (loggedUser) => {
-        const accessToken = loggedUser.tokens.accessToken;
-        const refreshToken = loggedUser.tokens.refreshToken;
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-        setUser(loggedUser);
-        toast.success("Login realizado com sucesso!");
-      },
-      onError: () => {
-        toast.error("Erro ao fazer login. Verifique suas credenciais.");
-      },
-    });
-  };
+  const handleSubmit = (data) => login(data);
 
   if (user) {
     return <h1>Ola, {user.email}</h1>;
@@ -101,7 +54,6 @@ const LoginPage = () => {
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
-      <h1>Ola {userTest}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <Card className="w-125">
