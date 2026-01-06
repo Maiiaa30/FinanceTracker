@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthContext } from "@/contexts/auth";
 import { api } from "@/lib/axios";
 
 const loginSchema = z.object({
@@ -35,6 +36,7 @@ const loginSchema = z.object({
 });
 
 const LoginPage = () => {
+  const { user: userTest } = useContext(AuthContext);
   const [user, setUser] = useState(null);
 
   const loginMutation = useMutation({
@@ -99,6 +101,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
+      <h1>Ola {userTest}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <Card className="w-125">
