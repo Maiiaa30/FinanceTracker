@@ -1,6 +1,6 @@
 import { Navigate } from "react-router";
 
-import { Button } from "@/components/ui/button";
+import Header from "@/components/Header";
 import { useAuthContext } from "@/contexts/auth";
 
 const Home = () => {
@@ -14,8 +14,7 @@ const Home = () => {
 
   return (
     <>
-      <h1>Ola, {user.first_name}!</h1>
-      <Button onClick={signOut}>Sair</Button>
+      <Header />
     </>
   );
 };
