@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { useAuthContext } from "@/contexts/auth";
 
 const Home = () => {
-  const { user, isInitializing, signOut } = useAuthContext();
+  const { user, isInitializing } = useAuthContext();
 
   if (isInitializing) return null;
 
