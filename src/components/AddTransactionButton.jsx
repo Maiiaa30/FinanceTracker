@@ -12,6 +12,8 @@ import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import z from "zod";
 
+import { getUserBalanceQueryKey } from "@/api/hooks/users";
+import { TransactionService } from "@/api/services/transaction";
 import {
   Dialog,
   DialogClose,
@@ -23,7 +25,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useAuthContext } from "@/contexts/auth";
-import { TransactionService } from "@/services/transaction";
 
 import { Button } from "./ui/button";
 import { DatePicker } from "./ui/date-picker";
@@ -55,7 +56,9 @@ const AddTransactionButton = () => {
     onSuccess: () => {
       toast.success("Transacao criada com sucesso!");
       setDialogIsOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["balance", user.id] });
+      queryClient.invalidateQueries({
+        queryKey: getUserBalanceQueryKey({ userId: user.id }),
+      });
     },
     onError: () => {
       toast.error("Erro ao criar transacao. Tente novamente.");
