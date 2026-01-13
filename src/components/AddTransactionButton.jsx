@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Loader2Icon,
   PiggyBankIcon,
@@ -9,11 +8,9 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-import { toast } from "sonner";
 import z from "zod";
 
-import { getUserBalanceQueryKey } from "@/api/hooks/users";
-import { TransactionService } from "@/api/services/transaction";
+import { useCreateTransaction } from "@/api/hooks/transactions";
 import {
   Dialog,
   DialogClose,
@@ -24,7 +21,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useAuthContext } from "@/contexts/auth";
 
 import { Button } from "./ui/button";
 import { DatePicker } from "./ui/date-picker";
@@ -48,22 +44,7 @@ const formSchema = z.object({
 });
 
 const AddTransactionButton = () => {
-  const queryClient = useQueryClient();
-  const { user } = useAuthContext();
-  const { mutateAsync: createTransaction } = useMutation({
-    mutationKey: ["createTransaction"],
-    mutationFn: (data) => TransactionService.create(data),
-    onSuccess: () => {
-      toast.success("Transacao criada com sucesso!");
-      setDialogIsOpen(false);
-      queryClient.invalidateQueries({
-        queryKey: getUserBalanceQueryKey({ userId: user.id }),
-      });
-    },
-    onError: () => {
-      toast.error("Erro ao criar transacao. Tente novamente.");
-    },
-  });
+  const { mutateAsync: createTransaction } = useCreateTransaction();
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   const form = useForm({
@@ -79,7 +60,11 @@ const AddTransactionButton = () => {
 
   const onSubmit = async (data) => {
     try {
-      await createTransaction(data);
+      await createTransaction(data, {
+        onSuccess: () => {
+          setDialogIsOpen(false);
+        },
+      });
     } catch (error) {
       console.error("Erro ao criar transacao:", error);
     }
