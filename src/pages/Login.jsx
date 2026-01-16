@@ -21,11 +21,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuthContext } from "@/contexts/auth";
-import useLoginForm from "@/forms/hooks/users";
+import { useLoginForm } from "@/forms/hooks/users";
 
 const LoginPage = () => {
   const { user, login, isInitializing } = useAuthContext();
-  const form = useLoginForm();
+  const { form } = useLoginForm();
 
   const handleSubmit = (data) => login(data);
 

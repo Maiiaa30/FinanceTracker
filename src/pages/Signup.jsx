@@ -1,7 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Loader2Icon } from "lucide-react";
 import { Link, Navigate } from "react-router";
-import { z } from "zod";
 
 import PasswordInput from "@/components/passwordsInputs";
 import { Button } from "@/components/ui/button";
@@ -24,45 +22,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuthContext } from "@/contexts/auth";
-
-const signupSchema = z
-  .object({
-    firstName: z.string().trim().min(1, {
-      message: "O nome e obrigatorio",
-    }),
-    lastName: z.string().trim().min(1, {
-      message: "O sobrenome e obrigatorio",
-    }),
-    email: z.email({ message: "Email invalido" }),
-    password: z.string().trim().min(6, {
-      message: "A password deve ter pelo menos 6 caracteres",
-    }),
-    passwordConfirmation: z.string().trim().min(6, {
-      message: "A confirmacao de password deve ter pelo menos 6 caracteres",
-    }),
-    terms: z.boolean().refine((val) => val === true, {
-      message: "Voce deve concordar com os termos de servico",
-    }),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: "As passwords nao coincidem",
-    path: ["passwordConfirmation"],
-  });
+import { useSignupForm } from "@/forms/hooks/users";
 
 const SignupPage = () => {
   const { user, signup, isInitializing } = useAuthContext();
-
-  const form = useForm({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
-      terms: false,
-    },
-  });
+  const form = useSignupForm();
 
   const handleSubmit = (data) => signup(data);
 
@@ -191,7 +155,12 @@ const SignupPage = () => {
               />
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Criar conta</Button>
+              <Button className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && (
+                  <Loader2Icon className="animate-spin" />
+                )}
+                Criar conta
+              </Button>
             </CardFooter>
           </Card>
         </form>
