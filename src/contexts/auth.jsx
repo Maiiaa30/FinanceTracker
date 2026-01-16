@@ -72,17 +72,15 @@ export const AuthContextProvider = ({ children }) => {
     });
   };
 
-  const login = (data) => {
-    loginMutation.mutate(data, {
-      onSuccess: (loggedUser) => {
-        setUser(loggedUser);
-        setTokens(loggedUser.tokens);
-        toast.success("Login realizado com sucesso!");
-      },
-      onError: () => {
-        toast.error("Erro ao fazer login. Verifique suas credenciais.");
-      },
-    });
+  const login = async (data) => {
+    try {
+      const loggedUser = await loginMutation.mutateAsync(data);
+      setUser(loggedUser);
+      setTokens(loggedUser.tokens);
+      toast.success("Login realizado com sucesso!");
+    } catch {
+      toast.error("Erro ao fazer login. Verifique suas credenciais.");
+    }
   };
 
   const signOut = () => {
