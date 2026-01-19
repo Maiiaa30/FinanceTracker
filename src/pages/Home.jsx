@@ -4,6 +4,7 @@ import AddTransactionButton from "@/components/AddTransactionButton";
 import Balance from "@/components/Balance";
 import DateSelection from "@/components/DateSelection";
 import Header from "@/components/Header";
+import TransactionsTable from "@/components/TransactionsTables";
 import { useAuthContext } from "@/contexts/auth";
 
 const Home = () => {
@@ -30,6 +31,7 @@ const Home = () => {
         <div className="grid grid-cols-[2fr_1fr]">
           <Balance />
         </div>
+        <TransactionsTable />
       </div>
     </>
   );
