@@ -8,6 +8,7 @@ import { useGetTransactions } from "@/api/hooks/transactions";
 import TransactionTypeBadge from "./TrabsactionTypeBadge";
 import { Button } from "./ui/button";
 import { DataTable } from "./ui/data-table";
+import { ScrollArea } from "./ui/scroll-area";
 
 const columns = [
   {
@@ -58,7 +59,14 @@ const TransactionsTable = () => {
   const from = searchParams.get("from");
   const to = searchParams.get("to");
   const { data: transactions } = useGetTransactions({ from, to });
-  return <DataTable columns={columns} data={transactions || []} />;
+  return (
+    <>
+      <h2 className="text-2xl font-bold">Transações</h2>
+      <ScrollArea className="h-115 max-h-115 rounded-md border">
+        <DataTable columns={columns} data={transactions || []} />
+      </ScrollArea>
+    </>
+  );
 };
 
 export default TransactionsTable;
