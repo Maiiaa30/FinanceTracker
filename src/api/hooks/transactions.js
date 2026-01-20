@@ -45,3 +45,27 @@ export const useGetTransactions = ({ from, to }) => {
     enabled: Boolean(from) && Boolean(to) && Boolean(user.id),
   });
 };
+
+export const updateTransactionMutationKey = ["updateTransaction"];
+
+export const useUpdateTransaction = () => {
+  const { user } = useAuthContext();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: updateTransactionMutationKey,
+    mutationFn: (data) => TransactionService.update(data),
+    onSuccess: () => {
+      toast.success("Transacao atualizada com sucesso!");
+      queryClient.invalidateQueries({
+        queryKey: getUserBalanceQueryKey({ userId: user.id }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getTransactionsQueryKey({ userId: user.id }),
+      });
+    },
+    onError: () => {
+      toast.error("Erro ao atualizar transacao. Tente novamente.");
+    },
+  });
+};

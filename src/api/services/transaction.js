@@ -15,4 +15,13 @@ export const TransactionService = {
     const response = await protectedApi.get(`/transactions/me?${queryParams}`);
     return response.data;
   },
+  update: async (input) => {
+    const response = await protectedApi.patch(`/transactions/me/${input.id}`, {
+      name: input.name,
+      amount: input.amount,
+      date: input.date,
+      type: input.type,
+    });
+    return response.data;
+  },
 };

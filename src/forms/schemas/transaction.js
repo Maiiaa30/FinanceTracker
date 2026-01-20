@@ -8,3 +8,7 @@ export const createTransactionFormSchema = z.object({
   date: z.date("A data e obrigatoria"),
   type: z.enum(["EARNING", "EXPENSE", "INVESTMENT"], "O tipo e obrigatorio"),
 });
+
+export const updateTransactionFormSchema = createTransactionFormSchema.extend({
+  id: z.string().uuid(),
+});
